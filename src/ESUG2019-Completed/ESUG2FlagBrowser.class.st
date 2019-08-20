@@ -69,10 +69,9 @@ ESUG2FlagBrowser >> connectPresenters [
 			destination
 				behavior: location classLocation;
 				setSelection: location interval ].
-	self flag: #A.
-	self flag: #a.
+
 	flags transmitTo: locations transform: [ :flag | flag locations ] postTransmission: [ :destination :origin :flag | destination selectIndex: 1 ].
-	flags whenSelectionChangedDo: [ :selection | self withWindowDo: [ :w | w title: 'Flag browser - ' , selection selectedItem parameter ] ].
+	flags whenSelectionChangedDo: [ :selection | self withWindowDo: [ :w | w title: self title ] ].
 
 	flags selectIndex: 1.
 
@@ -86,7 +85,10 @@ ESUG2FlagBrowser >> connectPresenters [
 { #category : #initialization }
 ESUG2FlagBrowser >> initialize [
 	super initialize.
-	caseSensitive := false
+	caseSensitive := false.
+	
+	self flag: #A.
+	self flag: #a
 ]
 
 { #category : #initialization }
@@ -108,13 +110,10 @@ ESUG2FlagBrowser >> initializePresenters [
 
 	notebook
 		addPage: (SpNotebookPage title: 'Code' icon: (self iconNamed: #changeUpdate) provider: [ code ]);
-		addPage:
-			(SpNotebookPage
-				title: 'Infos'
-				icon: (self iconNamed: #add)
-				provider: [ SpTextPresenter new
-						text: self selectedFlag;
-						yourself ])
+		addPage: (SpNotebookPage title: 'Infos' icon: (self iconNamed: #add) provider: [
+			SpTextPresenter new
+				text: self selectedFlag;
+				yourself ])
 ]
 
 { #category : #initialization }
@@ -133,4 +132,9 @@ ESUG2FlagBrowser >> selectedFlag [
 { #category : #accessing }
 ESUG2FlagBrowser >> selectedLocation [
 	^ locations selectedItem
+]
+
+{ #category : #initialization }
+ESUG2FlagBrowser >> title [
+	^ 'Flag browser - ' , self selectedFlag parameter
 ]
