@@ -51,7 +51,8 @@ ESUG2FlagBrowser class >> openPlayground [
 	GTPlayground openContents: 'p := ESUGFlagBrowser new.
 p openWithSpec.
 
-p caseSensitive: true'
+p caseSensitive: true.
+p caseSensitive: false.'
 ]
 
 { #category : #accessing }
