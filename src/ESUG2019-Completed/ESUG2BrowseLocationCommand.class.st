@@ -1,6 +1,6 @@
 Class {
 	#name : #ESUG2BrowseLocationCommand,
-	#superclass : #CmCommand,
+	#superclass : #ESUG2Command,
 	#category : #'ESUG2019-Completed-ESUG2019-Completed'
 }
 
@@ -13,7 +13,7 @@ ESUG2BrowseLocationCommand >> asSpecCommand [
 
 { #category : #executing }
 ESUG2BrowseLocationCommand >> execute [
-	self context locations selectedItem compiledMethod browse
+	self selectedMethod browse
 ]
 
 { #category : #initialization }

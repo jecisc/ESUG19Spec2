@@ -34,7 +34,7 @@ ESUG2FlagBrowser class >> defaultSpec [
 		position: 30 percent;
 		add:
 			(SpBoxLayout newVertical
-				add: 'Flags' height: self labelHeight;
+				add: 'Flags' expand: false fill: false padding: 0;
 				add: #flags;
 				yourself);
 		add:
@@ -60,34 +60,8 @@ ESUG2FlagBrowser >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean
 ]
 
-{ #category : #accessing }
-ESUG2FlagBrowser >> code [
-	^ code
-]
-
-{ #category : #accessing }
-ESUG2FlagBrowser >> code: anObject [
-	code := anObject
-]
-
-{ #category : #accessing }
-ESUG2FlagBrowser >> flags [
-	^ flags
-]
-
-{ #category : #accessing }
-ESUG2FlagBrowser >> flags: anObject [
-	flags := anObject
-]
-
 { #category : #initialization }
-ESUG2FlagBrowser >> initialize [
-	super initialize.
-	caseSensitive := false
-]
-
-{ #category : #initialization }
-ESUG2FlagBrowser >> initializePresenter [
+ESUG2FlagBrowser >> connectPresenters [
 	locations
 		transmitTo: code
 		transform: [ :location | location sourceCode ]
@@ -97,19 +71,26 @@ ESUG2FlagBrowser >> initializePresenter [
 				setSelection: location interval ].
 	self flag: #A.
 	self flag: #a.
-	flags
-		transmitTo: locations
-		transform: [ :flag | flag locations ]
-		postTransmission: [ :destination :origin :flag |
-			destination selectIndex: 1 ].
+	flags transmitTo: locations transform: [ :flag | flag locations ] postTransmission: [ :destination :origin :flag | destination selectIndex: 1 ].
+	flags whenSelectionChangedDo: [ :selection | self withWindowDo: [ :w | w title: 'Flag browser - ' , selection selectedItem parameter ] ].
 
 	flags selectIndex: 1.
-	
-	self property: #caseSensitive whenChangedDo: [ :bool | FBFlag caseSensitive: bool. flags items: FBSymbolFlag allFlags ]
+
+	self
+		property: #caseSensitive
+		whenChangedDo: [ :bool | 
+			FBFlag caseSensitive: bool.
+			flags items: FBSymbolFlag allFlags ]
 ]
 
 { #category : #initialization }
-ESUG2FlagBrowser >> initializeWidgets [
+ESUG2FlagBrowser >> initialize [
+	super initialize.
+	caseSensitive := false
+]
+
+{ #category : #initialization }
+ESUG2FlagBrowser >> initializePresenters [
 	locations := self newTable.
 	code := self newCode.
 	flags := self newList.
@@ -123,19 +104,16 @@ ESUG2FlagBrowser >> initializeWidgets [
 	locations
 		addColumn: (SpStringTableColumn title: 'Class' evaluated: [ :location | location classLocation ]);
 		addColumn: (SpStringTableColumn title: 'Method' evaluated: [ :location | location selector ]);
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ];
-		yourself.
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ].
 
 	notebook
-		addPage: (SpNotebookPage title: 'Code' icon: (self iconNamed:#changeUpdate) provider: [ code ]);
+		addPage: (SpNotebookPage title: 'Code' icon: (self iconNamed: #changeUpdate) provider: [ code ]);
 		addPage:
 			(SpNotebookPage
 				title: 'Infos'
-				icon:  (self iconNamed:#add)
+				icon: (self iconNamed: #add)
 				provider: [ SpTextPresenter new
-						text:
-							('Flag: {1}
-Number of locations: {2}' format: {self flags selectedItem parameter . self flags selectedItem locations size});
+						text: self selectedFlag;
 						yourself ])
 ]
 
@@ -148,16 +126,11 @@ ESUG2FlagBrowser >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #accessing }
-ESUG2FlagBrowser >> locations [
-	^ locations
+ESUG2FlagBrowser >> selectedFlag [
+	^ flags selectedItem
 ]
 
 { #category : #accessing }
-ESUG2FlagBrowser >> locations: anObject [
-	locations := anObject
-]
-
-{ #category : #enumerating }
-ESUG2FlagBrowser >> whenFlagChangedDo: aBlock [
-	flags whenSelectionChangedDo: [ :selection | aBlock value: selection selectedItem ]
+ESUG2FlagBrowser >> selectedLocation [
+	^ locations selectedItem
 ]

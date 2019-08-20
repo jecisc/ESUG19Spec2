@@ -1,6 +1,6 @@
 Class {
 	#name : #ESUG2InspectLocationCommand,
-	#superclass : #CmCommand,
+	#superclass : #ESUG2Command,
 	#category : #'ESUG2019-Completed-ESUG2019-Completed'
 }
 
@@ -13,7 +13,7 @@ ESUG2InspectLocationCommand >> asSpecCommand [
 
 { #category : #executing }
 ESUG2InspectLocationCommand >> execute [
-	self context locations selectedItem compiledMethod inspect
+	self selectedMethod inspect
 ]
 
 { #category : #initialization }
