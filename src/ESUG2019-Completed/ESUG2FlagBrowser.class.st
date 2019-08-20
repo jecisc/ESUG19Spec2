@@ -71,8 +71,8 @@ ESUG2FlagBrowser >> connectPresenters [
 				setSelection: location interval ].
 
 	flags transmitTo: locations transform: [ :flag | flag locations ] postTransmission: [ :destination :origin :flag | destination selectIndex: 1 ].
+	
 	flags whenSelectionChangedDo: [ :selection | self withWindowDo: [ :w | w title: self title ] ].
-
 	flags selectIndex: 1.
 
 	self
