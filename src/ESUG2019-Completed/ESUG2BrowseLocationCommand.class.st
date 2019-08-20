@@ -1,23 +1,23 @@
 Class {
-	#name : #ESUGBrowseLocationCommand,
+	#name : #ESUG2BrowseLocationCommand,
 	#superclass : #CmCommand,
-	#category : #ESUG2019
+	#category : #'ESUG2019-Completed-ESUG2019-Completed'
 }
 
 { #category : #converting }
-ESUGBrowseLocationCommand >> asSpecCommand [
+ESUG2BrowseLocationCommand >> asSpecCommand [
 	^ super asSpecCommand
 		iconName: #smallFind;
 		yourself
 ]
 
 { #category : #executing }
-ESUGBrowseLocationCommand >> execute [
+ESUG2BrowseLocationCommand >> execute [
 	self context locations selectedItem compiledMethod browse
 ]
 
 { #category : #initialization }
-ESUGBrowseLocationCommand >> initialize [
+ESUG2BrowseLocationCommand >> initialize [
 	super initialize.
 	self
 		basicName: 'Browse location'; 

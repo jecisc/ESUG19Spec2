@@ -1,23 +1,23 @@
 Class {
-	#name : #ESUGInspectLocationCommand,
+	#name : #ESUG2InspectLocationCommand,
 	#superclass : #CmCommand,
-	#category : #ESUG2019
+	#category : #'ESUG2019-Completed-ESUG2019-Completed'
 }
 
 { #category : #converting }
-ESUGInspectLocationCommand >> asSpecCommand [
+ESUG2InspectLocationCommand >> asSpecCommand [
 	^ super asSpecCommand
 		iconName: #smallInspectIt;
 		yourself
 ]
 
 { #category : #executing }
-ESUGInspectLocationCommand >> execute [
+ESUG2InspectLocationCommand >> execute [
 	self context locations selectedItem compiledMethod inspect
 ]
 
 { #category : #initialization }
-ESUGInspectLocationCommand >> initialize [
+ESUG2InspectLocationCommand >> initialize [
 	super initialize.
 	self
 		basicName: 'Inspect location'; 

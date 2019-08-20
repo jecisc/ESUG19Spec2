@@ -1,34 +1,35 @@
 Class {
-	#name : #ESUGFlagBrowser,
+	#name : #ESUG2FlagBrowser,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'#flags',
 		'#locations',
 		'#code',
-		'#caseSensitive => SpObservableSlot'
+		'#caseSensitive => SpObservableSlot',
+		'#notebook'
 	],
-	#category : #ESUG2019
+	#category : #'ESUG2019-Completed-ESUG2019-Completed'
 }
 
 { #category : #commands }
-ESUGFlagBrowser class >> buildCommandsGroupWith: presenterIntance forRoot: rootCommandGroup [
+ESUG2FlagBrowser class >> buildCommandsGroupWith: presenterIntance forRoot: rootCommandGroup [
 	rootCommandGroup
 		register:
 			((CmCommandGroup named: 'Menu') asSpecGroup
-				register: ESUGBrowseLocationCommand forSpec;
-				register: ESUGInspectLocationCommand forSpec;
+				register: ESUG2BrowseLocationCommand forSpec;
+				register: ESUG2InspectLocationCommand forSpec;
 				yourself);
 		register:
 			((CmCommandGroup named: 'Toolbar') asSpecGroup
 				register:
-					(ESUGBrowseLocationCommand forSpec
+					(ESUG2BrowseLocationCommand forSpec
 						basicName: 'Browse';
 						yourself);
 				yourself)
 ]
 
 { #category : #specs }
-ESUGFlagBrowser class >> defaultSpec [
+ESUG2FlagBrowser class >> defaultSpec [
 	^ SpPanedLayout newHorizontal
 		position: 30 percent;
 		add:
@@ -39,44 +40,53 @@ ESUGFlagBrowser class >> defaultSpec [
 		add:
 			(SpPanedLayout newVertical
 				add: #locations;
-				add: #code;
+				add: #notebook;
 				yourself);
 		yourself
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> caseSensitive: aBoolean [
+ESUG2FlagBrowser class >> openPlayground [
+	<script>
+	GTPlayground openContents: 'p := ESUGFlagBrowser new.
+p openWithSpec.
+
+p caseSensitive: true'
+]
+
+{ #category : #accessing }
+ESUG2FlagBrowser >> caseSensitive: aBoolean [
 	caseSensitive := aBoolean
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> code [
+ESUG2FlagBrowser >> code [
 	^ code
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> code: anObject [
+ESUG2FlagBrowser >> code: anObject [
 	code := anObject
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> flags [
+ESUG2FlagBrowser >> flags [
 	^ flags
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> flags: anObject [
+ESUG2FlagBrowser >> flags: anObject [
 	flags := anObject
 ]
 
 { #category : #initialization }
-ESUGFlagBrowser >> initialize [
+ESUG2FlagBrowser >> initialize [
 	super initialize.
 	caseSensitive := false
 ]
 
 { #category : #initialization }
-ESUGFlagBrowser >> initializePresenter [
+ESUG2FlagBrowser >> initializePresenter [
 	locations
 		transmitTo: code
 		transform: [ :location | location sourceCode ]
@@ -98,10 +108,11 @@ ESUGFlagBrowser >> initializePresenter [
 ]
 
 { #category : #initialization }
-ESUGFlagBrowser >> initializeWidgets [
+ESUG2FlagBrowser >> initializeWidgets [
 	locations := self newTable.
 	code := self newCode.
 	flags := self newList.
+	notebook := self newNotebook.
 
 	flags
 		display: [ :flag | flag parameter ];
@@ -112,11 +123,23 @@ ESUGFlagBrowser >> initializeWidgets [
 		addColumn: (SpStringTableColumn title: 'Class' evaluated: [ :location | location classLocation ]);
 		addColumn: (SpStringTableColumn title: 'Method' evaluated: [ :location | location selector ]);
 		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ];
-		yourself
+		yourself.
+
+	notebook
+		addPage: (SpNotebookPage title: 'Code' icon: (self iconNamed:#changeUpdate) provider: [ code ]);
+		addPage:
+			(SpNotebookPage
+				title: 'Infos'
+				icon:  (self iconNamed:#add)
+				provider: [ SpTextPresenter new
+						text:
+							('Flag: {1}
+Number of locations: {2}' format: {self flags selectedItem parameter . self flags selectedItem locations size});
+						yourself ])
 ]
 
 { #category : #initialization }
-ESUGFlagBrowser >> initializeWindow: aWindowPresenter [
+ESUG2FlagBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Flag browser';
 		initialExtent: 800 @ 600.
@@ -124,16 +147,16 @@ ESUGFlagBrowser >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> locations [
+ESUG2FlagBrowser >> locations [
 	^ locations
 ]
 
 { #category : #accessing }
-ESUGFlagBrowser >> locations: anObject [
+ESUG2FlagBrowser >> locations: anObject [
 	locations := anObject
 ]
 
 { #category : #enumerating }
-ESUGFlagBrowser >> whenFlagChangedDo: aBlock [
+ESUG2FlagBrowser >> whenFlagChangedDo: aBlock [
 	flags whenSelectionChangedDo: [ :selection | aBlock value: selection selectedItem ]
 ]
