@@ -119,7 +119,7 @@ ESUG2FlagBrowser >> initializePresenters [
 { #category : #initialization }
 ESUG2FlagBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
-		title: 'Flag browser';
+		title: self title;
 		initialExtent: 800 @ 600.
 	aWindowPresenter toolBar: (self rootCommandsGroup / 'Toolbar') asToolBarPresenter
 ]
