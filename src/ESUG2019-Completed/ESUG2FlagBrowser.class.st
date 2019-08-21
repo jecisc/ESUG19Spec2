@@ -5,8 +5,7 @@ Class {
 		'#flags',
 		'#locations',
 		'#code',
-		'#caseSensitive => SpObservableSlot',
-		'#notebook'
+		'#caseSensitive => SpObservableSlot'
 	],
 	#category : #'ESUG2019-Completed-ESUG2019-Completed'
 }
@@ -40,7 +39,7 @@ ESUG2FlagBrowser class >> defaultSpec [
 		add:
 			(SpPanedLayout newVertical
 				add: #locations;
-				add: #notebook;
+				add: #code;
 				yourself);
 		yourself
 ]
@@ -68,6 +67,11 @@ ESUG2FlagBrowser >> caseSensitive: aBoolean [
 
 { #category : #initialization }
 ESUG2FlagBrowser >> connectPresenters [
+	flags
+		transmitTo: locations
+		transform: [ :flag | flag locations ]
+		postTransmission: [ :destination :origin :flag | destination selectIndex: 1 ].
+
 	locations
 		transmitTo: code
 		transform: [ :location | location sourceCode ]
@@ -76,25 +80,17 @@ ESUG2FlagBrowser >> connectPresenters [
 				behavior: location classLocation;
 				setSelection: location interval ].
 
-	flags transmitTo: locations transform: [ :flag | flag locations ] postTransmission: [ :destination :origin :flag | destination selectIndex: 1 ].
-	
 	flags whenSelectionChangedDo: [ :selection | self withWindowDo: [ :w | w title: self title ] ].
-	flags selectIndex: 1.
 
 	self
 		property: #caseSensitive
 		whenChangedDo: [ :bool | 
 			FBFlag caseSensitive: bool.
-			flags items: FBSymbolFlag allFlags ]
-]
+			flags
+				items: FBSymbolFlag allFlags;
+				selectIndex: 1 ].
 
-{ #category : #initialization }
-ESUG2FlagBrowser >> initialize [
-	super initialize.
 	caseSensitive := false.
-	
-	self flag: #A.
-	self flag: #a
 ]
 
 { #category : #initialization }
@@ -102,24 +98,15 @@ ESUG2FlagBrowser >> initializePresenters [
 	locations := self newTable.
 	code := self newCode.
 	flags := self newList.
-	notebook := self newNotebook.
 
 	flags
 		display: [ :flag | flag parameter ];
-		items: FBSymbolFlag allFlags;
 		sortingBlock: #parameter ascending.
 
 	locations
 		addColumn: (SpStringTableColumn title: 'Class' evaluated: [ :location | location classLocation ]);
 		addColumn: (SpStringTableColumn title: 'Method' evaluated: [ :location | location selector ]);
-		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ].
-
-	notebook
-		addPage: (SpNotebookPage title: 'Code' icon: (self iconNamed: #changeUpdate) provider: [ code ]);
-		addPage: (SpNotebookPage title: 'Infos' icon: (self iconNamed: #add) provider: [
-			SpTextPresenter new
-				text: self selectedFlag infos;
-				yourself ])
+		contextMenuFromCommandsGroup: [ self rootCommandsGroup / 'Menu' ]
 ]
 
 { #category : #initialization }
@@ -142,5 +129,7 @@ ESUG2FlagBrowser >> selectedLocation [
 
 { #category : #initialization }
 ESUG2FlagBrowser >> title [
+	self flag: #A.
+	self flag: #a.
 	^ 'Flag browser - ' , self selectedFlag parameter
 ]
