@@ -23,7 +23,7 @@ ESUG2FlagBrowser class >> buildCommandsGroupWith: presenterIntance forRoot: root
 			((CmCommandGroup named: 'Toolbar') asSpecGroup
 				register:
 					(ESUG2BrowseLocationCommand forSpec
-						basicName: 'Browse';
+						name: 'Browse';
 						yourself);
 				yourself)
 ]
@@ -43,6 +43,12 @@ ESUG2FlagBrowser class >> defaultSpec [
 				add: #notebook;
 				yourself);
 		yourself
+]
+
+{ #category : #'instance creation' }
+ESUG2FlagBrowser class >> open [
+	<script>
+	self new openWithSpec
 ]
 
 { #category : #accessing }
@@ -112,7 +118,7 @@ ESUG2FlagBrowser >> initializePresenters [
 		addPage: (SpNotebookPage title: 'Code' icon: (self iconNamed: #changeUpdate) provider: [ code ]);
 		addPage: (SpNotebookPage title: 'Infos' icon: (self iconNamed: #add) provider: [
 			SpTextPresenter new
-				text: self selectedFlag;
+				text: self selectedFlag infos;
 				yourself ])
 ]
 

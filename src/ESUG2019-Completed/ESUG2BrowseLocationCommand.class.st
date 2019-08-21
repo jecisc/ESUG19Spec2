@@ -20,6 +20,6 @@ ESUG2BrowseLocationCommand >> execute [
 ESUG2BrowseLocationCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Browse location'; 
-		basicDescription: 'I browse a flag location'
+		name: 'Browse location'; 
+		description: 'I browse a flag location'
 ]

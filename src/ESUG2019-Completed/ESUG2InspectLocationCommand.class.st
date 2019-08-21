@@ -20,6 +20,6 @@ ESUG2InspectLocationCommand >> execute [
 ESUG2InspectLocationCommand >> initialize [
 	super initialize.
 	self
-		basicName: 'Inspect location'; 
-		basicDescription: 'I inspect a flag location'
+		name: 'Inspect location'; 
+		description: 'I inspect a flag location'
 ]

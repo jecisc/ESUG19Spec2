@@ -6,7 +6,7 @@ Class {
 
 { #category : #testing }
 ESUG2Command >> canBeExecuted [
-	self context selectedLocation isNotNil
+	^ self context selectedLocation isNotNil
 ]
 
 { #category : #executing }
